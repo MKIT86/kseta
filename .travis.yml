@@ -1,0 +1,36 @@
+language: cpp
+dist: trusty
+os:
+  - linux
+compiler:  
+  - gcc
+  - clang
+
+
+
+
+script:
+  - echo "Saving current workdir."
+  - export CURRENTDIR=`pwd`
+  - echo "Make sure cmake >3.3 is available."
+  - mkdir cmake-install
+  - cd cmake-install
+  - wget http://www.cmake.org/files/v3.4/cmake-3.4.1.tar.gz
+  - tar -xvzf cmake-3.4.1.tar.gz
+  - cd cmake-3.4.1/
+  - ./configure
+  - make 
+  - sudo make install
+  - sudo update-alternatives --install /usr/bin/cmake cmake /usr/local/bin/cmake 1 --force
+  - cd $CURRENTDIR
+  - echo "Preparing environment before compilation"
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_INSTALL_PREFIX=../install ..
+  - make
+  - make install
+  
+
+after_success:
+  - echo "Everything worked well, will publish executables now to production web server"
+

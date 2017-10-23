@@ -50,7 +50,7 @@ option(kseta_documentation "Whether or not to create doxygen doc target.")
 include(CTest)
 
 #--- enable CPack --------------------------------------------------------------
-include(cmake/ksetaCPack.cmake)
+#include(cmake/ksetaCPack.cmake)
 
 #--- target for Doxygen documentation ------------------------------------------
 if(kseta_documentation)
