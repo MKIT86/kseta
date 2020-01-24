@@ -6,50 +6,45 @@ g++ -o smart_pointers -std=c++14 -pthread -g -Wall -Wextra -Wpedantic -Werror sm
 
 class IntegerStore1 {
 public:
-   int* i;
 
-   IntegerStore1():i(new int(0)) { }
+    IntegerStore1() : i(new int(0)) { }
+    IntegerStore1(const IntegerStore1&) = delete;
+    IntegerStore1& operator=(const IntegerStore1&) = delete;
+    ~IntegerStore1() {
+        if(i != nullptr) {
+            delete i;
+        }
+    }
 
-   ~IntegerStore1() {
-      if(i) {
-         delete i;
-      }
-   }
+    void put(int* newValue) {
+        i = newValue;
+    }
 
-   void put(int* newValue) {
-      i = newValue;
-   }
-
-   int* get() {return i;}
+   int* get() { return i; }
 
 private:
-    // we need to explicitly disable value-copying, as it's not safe!
-    IntegerStore1(const IntegerStore1&);
-    IntegerStore1& operator=(const IntegerStore1&);
+    int* i;
 };
 
 class IntegerStore2 {
 public:
-   int* i;
+    IntegerStore2() : i(new int(0)) { }
+    IntegerStore2(const IntegerStore2&) = delete;
+    IntegerStore2& operator=(const IntegerStore2&) = delete;
+    ~IntegerStore2() {
+        if(i != nullptr) {
+            delete i;
+        }
+    }
 
-   IntegerStore2():i(new int(0)) { }
+    void set(int* newValue) {
+        i = newValue;
+    }
 
-   ~IntegerStore2() {
-      if(i) {
-         delete i;
-      }
-   }
-
-   void set(int* newValue) {
-      i = newValue;
-   }
-
-   int* get() {return i;}
+    int* get() { return i; }
 
 private:
-    // we need to explicitly disable value-copying, as it's not safe!
-    IntegerStore2(const IntegerStore2&);
-    IntegerStore2& operator=(const IntegerStore2&);
+    int* i;
 };
 
 void useCaseOne(){
@@ -69,7 +64,7 @@ void useCaseTwo() {
   auto store = new IntegerStore2();
   auto anInteger = int(3);
   std::cout << "IntegerStore contains " << *(store->get()) << std::endl;
-  store->set( &anInteger);
+  store->set(&anInteger);
   // let's change the value
   anInteger = 5;
   // does the IntegerStore see the changed value?
